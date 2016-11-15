@@ -1,0 +1,17 @@
+{
+  "name": "cml-status-fb-notify",
+  "version": "0.0.1",
+  "description": "notify me using facebook messanger when cml machine dead",
+  "main": "index.js",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "request": "^2.78.0",
+    "facebook-chat-api": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ssarcandy",
+  "license": "ISC"
+}

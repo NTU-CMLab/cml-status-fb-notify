@@ -1,3 +1,5 @@
+'use strict';
+
 const config = require('./config/config');
 const cheerio = require('cheerio');
 const request = require('request');

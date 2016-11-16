@@ -9,6 +9,7 @@
     "facebook-chat-api": "^1.2.0",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
+    "tabletojson": "^0.4.0",
     "webshot": "^0.18.0"
   },
   "devDependencies": {},

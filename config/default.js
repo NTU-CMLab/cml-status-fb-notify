@@ -1,9 +1,11 @@
 module.exports = {
-    user_email: "",
-    user_password: "",
-    notify_channel_id: 'fb_user_id',
-    filter_list:[
+    notify_channel_id: 'channel_id',
+    account: {
+        email: '',
+        password: ''
+    },
+    filter_list: [
         'cml5',
-        'cml15',
+        'cml15'
     ]
 };

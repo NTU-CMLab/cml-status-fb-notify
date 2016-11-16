@@ -5,8 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "cheerio": "^0.22.0",
+    "facebook-chat-api": "^1.2.0",
     "request": "^2.78.0",
-    "facebook-chat-api": "^1.2.0"
+    "webshot": "^0.18.0"
   },
   "devDependencies": {},
   "scripts": {

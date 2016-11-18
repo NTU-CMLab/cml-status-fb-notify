@@ -15,6 +15,7 @@ const options = {
     customCSS: 'body{background:white;}.low{background-color:#ff0}.medium{background-color:#F93}.high{background-color:#F33}.dead{background-color:red}'
 };
 
+const SWAP_THRESHOLD = 70;
 let msg = {};
 
 request('http://www.cmlab.csie.ntu.edu.tw/status/')
@@ -30,7 +31,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         // Summary of status.
         msg.body = '';
         if (dead.length) msg.body += `${dead.toString()} is dead.` + '\n';
-        if (swap.length) msg.body += `${swap.map(s => s.host).toString()} SWAP too high.`;
+        if (swap.length) msg.body += `${swap.map(s => s.host).toString()} Swap > ${SWAP_THRESHOLD}`;
 
         return webshot(body, 'tmp.png', options);
     })
@@ -59,6 +60,6 @@ function deadMachines(dead) {
 
 function highSWAP(table) {
     return table.filter(cml => {
-        return Number(cml['Swap (%)']) > 60;
+        return Number(cml['Swap (%)']) > SWAP_THRESHOLD;
     });
 }

@@ -40,6 +40,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         msg.attachment = fs.createReadStream(__dirname + '/tmp.png');
         api.sendMessage(msg, config.notify_channel_id, function (err) {
             console.log('done.');
+            fs.unlink('tmp.png');
         });
     })
     .catch(err => console.error(err));

@@ -1,5 +1,7 @@
 'use strict';
 
+// add timestamps in front of log messages
+require('console-stamp')(console, 'yyyy/mm/dd HH:MM:ss');
 const config = require('./config/config');
 const Promise = require('bluebird');
 const cheerio = require('cheerio');
@@ -18,6 +20,7 @@ const options = {
 const SWAP_THRESHOLD = 70;
 let msg = {};
 
+fs.unlink('tmp.png', (err) => {});
 request('http://www.cmlab.csie.ntu.edu.tw/status/')
     .then(body => {
         const $ = cheerio.load(body);
@@ -26,7 +29,10 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         const swap = highSWAP(table);
 
         // All machines are fine~
-        if (!dead.length && !swap.length) process.exit(0);
+        if (!dead.length && !swap.length) {
+            console.log('All machines are fine~');
+            process.exit(0);
+        }
 
         // Summary of status.
         msg.body = '';
@@ -39,8 +45,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
     .then(api => {
         msg.attachment = fs.createReadStream(__dirname + '/tmp.png');
         api.sendMessage(msg, config.notify_channel_id, function (err) {
-            console.log('done.');
-            fs.unlink('tmp.png');
+            console.log(msg.body);
         });
     })
     .catch(err => console.error(err));

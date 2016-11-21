@@ -20,7 +20,6 @@ const options = {
 const SWAP_THRESHOLD = 70;
 let msg = {};
 
-fs.unlink('tmp.png', (err) => {});
 request('http://www.cmlab.csie.ntu.edu.tw/status/')
     .then(body => {
         const $ = cheerio.load(body);

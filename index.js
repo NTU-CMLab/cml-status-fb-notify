@@ -38,11 +38,11 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         if (dead.length) msg.body += `${dead.toString()} is dead.` + '\n';
         if (swap.length) msg.body += `${swap.map(s => s.host).toString()} Swap > ${SWAP_THRESHOLD}`;
 
-        return webshot(body, 'tmp.png', options);
+        return webshot(body, `${__dirname}/tmp.png`, options);
     })
     .then(() => loginFacebook(config.account))
     .then(api => {
-        msg.attachment = fs.createReadStream(__dirname + '/tmp.png');
+        msg.attachment = fs.createReadStream(`${__dirname}/tmp.png`);
         api.sendMessage(msg, config.notify_channel_id, function (err) {
             console.log(msg.body);
         });

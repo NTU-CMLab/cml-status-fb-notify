@@ -10,6 +10,7 @@ const request = require('request-promise');
 const loginFacebook = Promise.promisify(require('facebook-chat-api'));
 const webshot = Promise.promisify(require('webshot'));
 const fs = require('fs');
+const log = require('./log.json');
 
 const options = {
     siteType: 'html',
@@ -30,6 +31,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         // All machines are fine~
         if (!dead.length && !swap.length) {
             console.log('All machines are fine~');
+            fs.writeFileSync('./log.json', '{}');
             process.exit(0);
         }
 
@@ -37,6 +39,13 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         msg.body = '';
         if (dead.length) msg.body += `${dead.toString()} is dead.` + '\n';
         if (swap.length) msg.body += `${swap.map(s => s.host).toString()} Swap > ${SWAP_THRESHOLD}`;
+
+        if (msg.body === log.body) {
+            console.log('Already warned.');
+            process.exit(0);
+        } else {
+            fs.writeFileSync('./log.json', JSON.stringify(msg));
+        }
 
         return webshot(body, `${__dirname}/tmp.png`, options);
     })

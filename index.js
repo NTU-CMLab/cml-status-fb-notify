@@ -31,7 +31,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         // All machines are fine~
         if (!dead.length && !swap.length) {
             console.log('All machines are fine, flush log');
-            fs.writeFileSync('./log.json', '{}');
+            fs.writeFileSync(`${__dirname}/log.json`, '{}');
             process.exit(0);
         }
 
@@ -44,7 +44,7 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
             console.log('Already warned.');
             process.exit(0);
         } else {
-            fs.writeFileSync('./log.json', JSON.stringify(msg));
+            fs.writeFileSync(`${__dirname}/log.json`, JSON.stringify(msg));
         }
 
         return webshot(body, `${__dirname}/tmp.png`, options);

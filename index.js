@@ -18,7 +18,8 @@ const options = {
     customCSS: 'body{background:white;}.low{background-color:#ff0}.medium{background-color:#F93}.high{background-color:#F33}.dead{background-color:red}'
 };
 
-const SWAP_THRESHOLD = 70;
+const SWAP_THRESHOLD = 10;
+const MEMORY_THRESHOLD = 10000;
 let msg = {};
 
 request('http://www.cmlab.csie.ntu.edu.tw/status/')
@@ -27,9 +28,10 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         const table = table2json.convert(body)[0];
         const dead = deadMachines($('.dead'));
         const swap = highSWAP(table);
+        const ram = lowRAM(table);
 
         // All machines are fine~
-        if (!dead.length && !swap.length) {
+        if (!dead.length && !swap.length && !ram.length) {
             console.log('All machines are fine, flush log');
             fs.writeFileSync(`${__dirname}/log.json`, '{}');
             process.exit(0);
@@ -37,8 +39,9 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
 
         // Summary of status.
         msg.body = '';
-        if (dead.length) msg.body += `${dead.toString()} is dead.` + '\n';
-        if (swap.length) msg.body += `${swap.map(s => s.host).toString()} Swap > ${SWAP_THRESHOLD}`;
+        if (dead.length) msg.body += `${dead.toString()} is dead.\n`;
+        if (swap.length) msg.body += `${swap.map(s => s.host).toString()} Swap > ${SWAP_THRESHOLD}%\n`;
+        if (ram.length) msg.body += `${ram.map(r => r.host).toString()} RAM < ${MEMORY_THRESHOLD}MB\n`;
 
         if (msg.body === log.body) {
             console.log('Already warned.');
@@ -73,7 +76,12 @@ function deadMachines(dead) {
 }
 
 function highSWAP(table) {
+    return table.filter(cml => Number(cml['Swap (%)']) > SWAP_THRESHOLD);
+}
+
+function lowRAM(table) {
     return table.filter(cml => {
-        return Number(cml['Swap (%)']) > SWAP_THRESHOLD;
+        const freeRAM = Number(cml['Free Mem (MB)']); 
+        return freeRAM > 0 && freeRAM < MEMORY_THRESHOLD;
     });
 }

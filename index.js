@@ -18,7 +18,7 @@ const options = {
     customCSS: 'body{background:white;}.low{background-color:#ff0}.medium{background-color:#F93}.high{background-color:#F33}.dead{background-color:red}'
 };
 
-const SWAP_THRESHOLD = 10;
+const SWAP_THRESHOLD = 70;
 const MEMORY_THRESHOLD = 10000;
 let msg = {};
 

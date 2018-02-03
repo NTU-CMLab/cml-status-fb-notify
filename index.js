@@ -30,6 +30,11 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
         const swap = highSWAP(table);
         const ram = lowRAM(table);
 
+        if (!!log.error) {
+            console.log('Error when login Facebook.');
+            process.exit(0);
+        }
+
         // All machines are fine~
         if (!dead.length && !swap.length && !ram.length) {
             console.log('All machines are fine, flush log');
@@ -59,7 +64,10 @@ request('http://www.cmlab.csie.ntu.edu.tw/status/')
             console.log(msg.body);
         });
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error(err);
+        fs.writeFileSync(`${__dirname}/log.json`, JSON.stringify(err));
+    });
 
 
 
